@@ -1,16 +1,16 @@
-import React from 'react'
-import {useSelector, shallowEqual} from 'react-redux'
-import {Link} from 'react-router-dom'
-import Login from '../components/sample-forms/login'
+import React from "react";
+import { useSelector, shallowEqual } from "react-redux";
+import { Link } from "react-router-dom";
+import Login from "../components/sample-forms/login";
 
 const Index = () => {
-  const {config} = useSelector(
+  const { config } = useSelector(
     (state) => ({
-      config: state.config
+      config: state.config,
     }),
-    shallowEqual
-  )
-  let {name} = {...config}
+    shallowEqual,
+  );
+  let { name } = { ...config };
   return (
     <>
       <div className="w-full flex flex-row h-screen overflow-hidden">
@@ -27,7 +27,7 @@ const Index = () => {
               Autenticación
             </div>
             <div className="text-sm font-bold">
-             Por favor ingrese su email y contraseña
+              Por favor ingrese su email y contraseña
             </div>
           </div>
           <Login />
@@ -44,12 +44,12 @@ const Index = () => {
               <Link to="/terms-of-service">Términos y condiciones</Link>
               {/* <Link to="/contact-us">Contact us</Link> */}
             </div>
-            <div className="text-grey-500">&copy; {name} 2020</div>
+            <div className="text-grey-500">&copy; {name} 2021</div>
           </div>
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Index
+export default Index;

@@ -1,26 +1,26 @@
 export default function palettes(
   state = {
-    background: 'light',
-    leftSidebar: 'light',
-    navbar: 'light',
-    rightSidebar: 'light'
+    background: "light",
+    leftSidebar: "dark",
+    navbar: "light",
+    rightSidebar: "light",
   },
-  action
+  action,
 ) {
   switch (action.type) {
-    case 'SET_PALETTE':
+    case "SET_PALETTE":
       return {
         ...state,
-        ...action.palette
-      }
-    case 'RESET_PALETTES':
+        ...action.palette,
+      };
+    case "RESET_PALETTES":
       return {
-        background: 'light',
-        leftSidebar: 'light',
-        navbar: 'light',
-        rightSidebar: 'light'
-      }
+        background: "light",
+        leftSidebar: "light",
+        navbar: "light",
+        rightSidebar: "light",
+      };
     default:
-      return state
+      return state;
   }
 }

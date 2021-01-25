@@ -3,41 +3,25 @@ import MUIDataTable from "mui-datatables";
 import { api } from "../../../functions/db";
 import axios from "axios";
 
-const ListInsumos = () => {
-  const [isInsu, setIsInsu] = useState(false);
+const ListProductos = () => {
+  const [isProd, setIsProd] = useState(false);
   const [lista, setLista] = useState([]);
 
   const ObtenerLista = async () => {
-    const datos = await axios.get(`${api}insumos/?ordering=nombre`);
+    const datos = await axios.get(`${api}produccion/?ordering=nombre`);
     if (datos.data.length > 0) {
       setLista(datos.data);
-      setIsInsu(true);
+      setIsProd(true);
     }
   };
   useEffect(() => {
-    if (!isInsu) ObtenerLista();
-  }, [isInsu]);
+    if (!isProd) ObtenerLista();
+  }, [isProd]);
 
   const columns = [
     {
       name: "nombre",
-      label: "Insumo",
-      options: {
-        filter: true,
-        sort: true,
-      },
-    },
-    {
-      name: "rendimiento",
-      label: "Rendimiento (%)",
-      options: {
-        filter: true,
-        sort: true,
-      },
-    },
-    {
-      name: "cantidad",
-      label: "Cantidad",
+      label: "Producto",
       options: {
         filter: true,
         sort: true,
@@ -52,8 +36,16 @@ const ListInsumos = () => {
       },
     },
     {
+      name: "sabor.nombre",
+      label: "Sabor",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
       name: "modified",
-      label: "Última compra",
+      label: "Fecha última producción",
       options: {
         filter: true,
         sort: true,
@@ -72,4 +64,4 @@ const ListInsumos = () => {
   );
 };
 
-export default ListInsumos;
+export default ListProductos;

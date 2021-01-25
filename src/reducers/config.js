@@ -4,7 +4,7 @@ export default function config(
     description: "Kendra App",
     url: "https://kendra.co",
     layout: "layout-1",
-    collapsed: true,
+    collapsed: false,
     rightSidebar: false,
     backdrop: true,
   },

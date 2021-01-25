@@ -37,18 +37,39 @@ const ShoppingCartForm = ({ handleInsu }) => {
     if (adicion.length > 0) AddAdicion(orden.data.id, adicion);
   };
 
+  // Añadiendo consumo promdiuccion
+
+  const ConsumoProduccion = async (id, gramos) => {
+    const objeto = {
+      producto: parseInt(id),
+      gramos: parseInt(gramos),
+    };
+    await axios.post(`${api}produccion/consumo/add/`, objeto);
+  };
+  // Añadiendo consumo insumo
+  const ConsumoInsumo = async (id, gramos) => {
+    const objeto = {
+      insumo: parseInt(id),
+      gramos: parseInt(gramos),
+    };
+    await axios.post(`${api}insumos/consumo/add/`, objeto);
+  };
+
   // Añadiendo Insumo
   const AddInsumo = async (orden, insumo) => {
     insumo.map((data) => {
       const detalle_orden_ped = {
         pedido: parseInt(orden),
-        ingrediente_name: data.nombre,
-        gramos: parseInt(data.gramos_preparacion),
+        ingrediente_name: data.insumo.nombre,
+        gramos: parseInt(data.gramos),
       };
       // Agregamos pedido
       AddDetallePedido(detalle_orden_ped);
       // descotamos los gramos de los insumos
-      UpGramosInsumos_1(data.id, data.gramos_preparacion);
+      UpGramosInsumos_1(data.insumo.id, data.gramos);
+
+      // Agregamos consumo
+      ConsumoInsumo(data.insumo.id, data.gramos);
     });
   };
   // Añadiendo sabor
@@ -66,6 +87,9 @@ const ShoppingCartForm = ({ handleInsu }) => {
 
       // descotamos los gramos de los helados
       UpGramosProd(data.id_sabor, gramos_sabor);
+
+      // Añadimos consumo
+      ConsumoProduccion(data.id_sabor, gramos_sabor);
 
       return null;
     });

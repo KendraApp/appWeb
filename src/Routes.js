@@ -8,7 +8,7 @@ import Dashboard from "./pages/dashboard";
 // import Lists from './pages/lists'
 // import LockScreen from './pages/lock-screen'
 import Login3 from "./pages/login-3";
-// import Logout from './pages/logout'
+import Logout from "./pages/logout";
 // import Validation from './pages/validation'
 // import SampleForms from './pages/sample-forms'
 // import Landing from './pages/landing'
@@ -20,12 +20,17 @@ import Ordenar from "./pages/ordenar";
 import ShopInsumos from "./pages/Produccion/Insumos/ShopInsumos";
 import Insumos from "./pages/Produccion/Insumos/Insumos";
 import ShoppingCart from "./pages/Pedidos/ShoppinCart";
+import Producir from "./pages/Produccion/Productos/Producir";
+import PrintFactu from "./pages/Facturacion/Print";
 
 const Routes = () => {
   return (
     <Switch>
       <Route path="/e-commerce">
         <Ecommerce />
+      </Route>
+      <Route exact path="/producir">
+        <Producir />
       </Route>
       <Route exact path="/ShopingCart">
         <ShoppingCart />
@@ -51,11 +56,17 @@ const Routes = () => {
       <Route path="/login-3">
         <Login3 />
       </Route>
+      <Route path="/logout">
+        <Logout />
+      </Route>
+      <Route path="/facturacion/print">
+        <PrintFactu />
+      </Route>
       <Route path="/ordenar/:id">
         <Ordenar />
       </Route>
       <Route exact path="/">
-        <Dashboard />
+        <Login3 />
       </Route>
       <Route component={Index} />
     </Switch>

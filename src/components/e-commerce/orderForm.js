@@ -78,7 +78,7 @@ const OrderForm = () => {
   const [cantGramaje, setCantGramaje] = useState();
 
   // Para condicionales
-  const [condicionales, setCondicionales] = useState("Ninguno"); // para las condicionales
+  const [condicionales, setCondicionales] = useState(); // para las condicionales
 
   const [isProd, setIsProd] = useState(false);
 
@@ -98,8 +98,6 @@ const OrderForm = () => {
   const [tipoOrder, setTipoOrder] = useState(); // Tipo de orden
   const [obs, setObs] = useState();
 
-  const [carrito, setCarrito] = useState([]); // Carrito de compra
-
   // Cosas del reducer
   const dispatch = useDispatch();
 
@@ -111,9 +109,12 @@ const OrderForm = () => {
     let separar = insumo.split("|");
     //console.log(id)
     const objeto = {
-      id: parseInt(separar[0]),
-      nombre: separar[2],
-      gramos_preparacion: parseInt(separar[1]),
+      id: shortid.generate(),
+      id_insumo: parseInt(separar[0]),
+      insumo: {
+        nombre: separar[2],
+      },
+      gramos: parseInt(separar[1]),
     };
 
     setListInsumos([...listInsumos, objeto]);
@@ -124,7 +125,7 @@ const OrderForm = () => {
     setListInsumos(filtro);
 
     // Agredandato datos de condicionales
-    if (listInsumos.length > 1) {
+    if (listInsumos.length > 0) {
       setCondicionales("");
       let conteni = condicionales;
       if (conteni) {
@@ -147,6 +148,7 @@ const OrderForm = () => {
       id: shortid.generate(),
       id_sabor: separar[0],
       sabor: separar[1],
+      categoria: separar[2],
     };
 
     setListsabor([...listsabor, objeto]);
@@ -183,8 +185,6 @@ const OrderForm = () => {
     setListadicion(filtro);
   };
 
-  //  console.log("sabores", listsabor)
-  //  console.log("cantidad de gramaje", cantGramaje)
   const getStepContent = (step) => {
     switch (step) {
       case 0:
@@ -222,14 +222,18 @@ const OrderForm = () => {
                       <FolderIcon />
                     </Avatar>
                   </ListItemAvatar>
-                  <ListItemText primary={item.nombre} />
-                  <ListItemSecondaryAction>
-                    <IconButton edge="end" aria-label="delete">
-                      <DeleteIcon
-                        onClick={() => deleteIngrediente(item.id, item.nombre)}
-                      />
-                    </IconButton>
-                  </ListItemSecondaryAction>
+                  <ListItemText primary={item.insumo.nombre} />
+                  {!item.obligatorio && (
+                    <ListItemSecondaryAction>
+                      <IconButton edge="end" aria-label="delete">
+                        <DeleteIcon
+                          onClick={() =>
+                            deleteIngrediente(item.id, item.insumo.nombre)
+                          }
+                        />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  )}
                 </ListItem>
               ))}
             </List>
@@ -244,9 +248,7 @@ const OrderForm = () => {
                   <em>Eligir Ingrediente</em>
                 </MenuItem>
                 {insumos.map((item, i) => (
-                  <MenuItem
-                    value={`${item.id}|${item.gramos_preparacion}|${item.nombre}`}
-                  >
+                  <MenuItem value={`${item.id}|10|${item.nombre}`}>
                     {item.nombre}
                   </MenuItem>
                 ))}
@@ -274,7 +276,10 @@ const OrderForm = () => {
                       <FolderIcon />
                     </Avatar>
                   </ListItemAvatar>
-                  <ListItemText primary={item.sabor} />
+                  <ListItemText
+                    primary={item.sabor}
+                    secondary={item.categoria}
+                  />
                   <ListItemSecondaryAction>
                     <IconButton edge="end" aria-label="delete">
                       <DeleteIcon onClick={() => deleteSabor(item.id)} />
@@ -296,8 +301,10 @@ const OrderForm = () => {
                     <em>Eligir sabor</em>
                   </MenuItem>
                   {sabores.map((item, i) => (
-                    <MenuItem value={`${item.id}|${item.sabor.nombre}`}>
-                      {item.sabor.nombre}
+                    <MenuItem
+                      value={`${item.id}|${item.sabor.nombre}|${item.categoria.nombre}`}
+                    >
+                      {`${item.categoria.nombre} - ${item.sabor.nombre}`}
                     </MenuItem>
                   ))}
                 </Select>
@@ -426,10 +433,13 @@ const OrderForm = () => {
       const obtenerProductos = async () => {
         const producto = await axios.get(`${api}productos/${id}/`);
         setProductos(producto.data);
-
+        const paqueteProducto = await axios.get(
+          `${api}productos/insumos?producto=${id}`,
+        );
+        console.log(paqueteProducto);
         producto.data.map((item, i) => {
           setNomProdu(item.nombre);
-          setListInsumos(item.insumos);
+          setListInsumos(paqueteProducto.data);
           setPrecio(item.precio);
           setGramaje(item.gramos);
           setCantGramaje(item.cantidad_gramos);
@@ -471,7 +481,7 @@ const OrderForm = () => {
       // Si existen insumos
       ins = "Ingredientes: ";
       listInsumos.map((data) => {
-        ins += data.nombre + ",";
+        ins += data.insumo.nombre + ",";
       });
     }
     if (listsabor.length > 0) {
@@ -503,6 +513,7 @@ const OrderForm = () => {
       condiciones: condicionales,
       nombre: nomProdu,
       gramaje: gramaje,
+      cantidad: 1,
     };
     console.log(orden_prod);
 
@@ -513,121 +524,8 @@ const OrderForm = () => {
       adicion: listadicion,
     };
 
-    console.log("Información del orden para el carrito: ", objetoCarrito);
+    //console.log("Información del orden para el carrito: ", objetoCarrito);
     dispatch(AddOrdenesAccion(objetoCarrito));
-
-    // const orden = await axios.post(`${api}pedido/crear/`, orden_prod);
-
-    // // Agregamos los sabores del helado
-    // const AddDetallePedido = async (detalle) => {
-    //   await axios.post(`${api}pedido/detalle/crear/`, detalle);
-    // };
-
-    // const UpGramosProd = async (prod, gramos) => {
-    //   const produc_gramos = await axios.get(`${api}produccion/buscar/${prod}/`);
-    //   const new_gramos =
-    //     parseInt(produc_gramos.data[0].gramos) - parseInt(gramos);
-
-    //   const objeto = {
-    //     gramos: new_gramos,
-    //   };
-
-    //   await axios.put(`${api}produccion/update/${prod}/`, objeto);
-    //   //console.log("Actualizando gramos: " ,update_gramos.data.gramos)
-    // };
-
-    // const UpGramosInsumos_1 = async (prod, gramos) => {
-    //   //Buscamos el id de insumo
-
-    //   const produc_gramos = await axios.get(`${api}insumos/buscar/${prod}/`);
-    //   const new_gramos =
-    //     parseInt(produc_gramos.data[0].gramos) - parseInt(gramos);
-
-    //   const objeto = {
-    //     gramos: new_gramos,
-    //   };
-    //   await axios.put(`${api}insumos/update/${prod}/`, objeto);
-    // };
-
-    // const UpGramosInsumos = async (prod, gramos) => {
-    //   //Buscamos el id de insumo
-
-    //   const id_insumo = await axios.get(`${api}productos/${prod}/`);
-    //   //console.log("Información del insumo: ", id_insumo.data[0].insumos[0].id)
-
-    //   const produc_gramos = await axios.get(
-    //     `${api}insumos/buscar/${id_insumo.data[0].insumos[0].id}/`,
-    //   );
-    //   const new_gramos =
-    //     parseInt(produc_gramos.data[0].gramos) - parseInt(gramos);
-
-    //   const objeto = {
-    //     gramos: new_gramos,
-    //   };
-    //   await axios.put(
-    //     `${api}insumos/update/${id_insumo.data[0].insumos[0].id}/`,
-    //     objeto,
-    //   );
-    // };
-
-    // if (listInsumos.length > 0) {
-    //   // Si existen insumos
-
-    //   listInsumos.map((data) => {
-    //     const detalle_orden_ped = {
-    //       pedido: parseInt(orden.data.id),
-    //       ingrediente_name: data.nombre,
-    //       gramos: parseInt(data.gramos_preparacion),
-    //     };
-    //     // Agregamos pedido
-    //     AddDetallePedido(detalle_orden_ped);
-    //     // descotamos los gramos de los insumos
-    //     UpGramosInsumos_1(data.id, data.gramos_preparacion);
-    //     return null;
-    //   });
-    // }
-
-    // if (listsabor.length > 0) {
-    //   // Si hay sabores elegidos.
-
-    //   //Evaluamos la cantidad de sabores elegidos
-    //   const gramos_sabor = gramaje / listsabor.length;
-
-    //   listsabor.map((data) => {
-    //     const detalle_orden_ped = {
-    //       pedido: parseInt(orden.data.id),
-    //       ingrediente_name: "(Helado) " + data.sabor,
-    //       gramos: parseInt(gramos_sabor),
-    //     };
-    //     // Agregamos pedido
-    //     AddDetallePedido(detalle_orden_ped);
-
-    //     // descotamos los gramos de los helados
-    //     UpGramosProd(data.id_sabor, gramos_sabor);
-
-    //     return null;
-    //   });
-    // }
-
-    // // Adiciones del usuario
-
-    // if (listadicion.length > 0) {
-    //   // Si existen adiciones
-
-    //   listadicion.map((data) => {
-    //     const detalle_orden_ped = {
-    //       pedido: parseInt(orden.data.id),
-    //       ingrediente_name: data.nombre,
-    //       gramos: parseInt(data.gramos),
-    //       valor: parseInt(data.precio),
-    //     };
-    //     // Agregamos pedido
-    //     AddDetallePedido(detalle_orden_ped);
-    //     // descotamos los gramos de los insumos
-    //     UpGramosInsumos(data.id_adicion, data.gramos);
-    //     return null;
-    //   });
-    // }
   };
 
   const handleBack = () => {

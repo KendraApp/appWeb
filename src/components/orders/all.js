@@ -9,6 +9,9 @@ import { Button } from "@material-ui/core/";
 import Checkbox from "@material-ui/core/Checkbox";
 import axios from "axios";
 import Facturacion from "./facturacion";
+import { api } from "../../functions/db";
+import ReactToPrint from "react-to-print";
+// import FactuPrint from "./factuprint";
 
 const All = () => {
   const [pedidos, setPedidos] = useState([]);
@@ -21,12 +24,12 @@ const All = () => {
     const objeto = {
       cancelado: es,
     };
-    await axios.put(`http://localhost:8000/api/pedido/update/${id}/`, objeto);
+    await axios.put(`${api}pedido/update/${id}/`, objeto);
   };
   useEffect(() => {
     const obtenerPedidos = async () => {
       const new_pedidos = await axios.get(
-        `http://localhost:8000/api/pedido?ordering=-modified&facturado=false`,
+        `${api}pedido?ordering=-modified&facturado=false`,
       );
 
       if (new_pedidos.data.length > 0) {
@@ -37,7 +40,7 @@ const All = () => {
 
     const interval = setInterval(() => {
       obtenerPedidos();
-    }, 5000);
+    }, 3000);
     return () => clearInterval(interval);
   }, []);
 
@@ -45,9 +48,6 @@ const All = () => {
   const [seleccionFactu, setSeleccionFactu] = useState([]);
 
   const handleChecked = (id, produ, comple, cond, obs, precio, e) => {
-    // console.log("checked: ", e)
-    //console.log("valor del id: ", id)
-    //let sum_precio = 0;
     const objeto = {
       id,
       produ,
@@ -63,7 +63,7 @@ const All = () => {
         setSeleccion([...seleccion, objeto]);
         setSeleccionFactu([...seleccionFactu, objeto2]);
       } else {
-        const filtro = seleccion.filter((dt) => dt.id != id);
+        const filtro = seleccion.filter((dt) => dt.id !== id);
         setSeleccion(filtro);
         setSeleccionFactu(filtro);
       }
@@ -279,11 +279,8 @@ const All = () => {
     const objeto = {
       facturado: true,
     };
-    const facturapedido = await axios.put(
-      `http://localhost:8000/api/pedido/update/${id}/`,
-      objeto,
-    );
-    // console.log(facturapedido)
+
+    await axios.put(`${api}pedido/update/${id}/`, objeto);
   };
 
   const FacturarAlone = async () => {
@@ -294,42 +291,62 @@ const All = () => {
       pedidos: seleccionFactu,
     };
 
-    seleccionFactu.map((dt) => {
-      //console.log(dt)
-      UpdatePedido(dt);
-    });
-
-    //console.log("Información a facturar: ", objeto)
-
-    const facturar = await axios.post(
-      `http://localhost:8000/api/facturas/add/`,
-      objeto,
-    );
-    // console.log(facturar)
-    setOpen(false);
-  };
-  const FacturarSave = async () => {
-    const objeto = {
-      guardado: true,
-      valor: parseInt(precioFactu),
-      personas: 1,
-      pedidos: seleccionFactu,
-    };
+    await axios.post(`${api}facturas/add/`, objeto);
 
     seleccionFactu.map((dt) => {
       //console.log(dt)
       UpdatePedido(dt);
     });
 
-    //console.log("Información a facturar: ", objeto)
-
-    const facturar = await axios.post(
-      `http://localhost:8000/api/facturas/add/`,
-      objeto,
-    );
+    setSeleccionFactu([]);
     // console.log(facturar)
     setOpen(false);
   };
+
+  const FacturarAndPrint = async () => {
+    // const objeto = {
+    //   facturado: true,
+    //   valor: parseInt(precioFactu),
+    //   personas: 1,
+    //   pedidos: seleccionFactu,
+    // };
+
+    // await axios.post(`${api}facturas/add/`, objeto);
+
+    // seleccionFactu.map((dt) => {
+    //   //console.log(dt)
+    //   UpdatePedido(dt);
+    // });
+
+    // setSeleccionFactu([]);
+    window.open(
+      `http://localhost:3000/facturacion/print/`,
+      "_blank",
+      "toolbar=0,location=0,menubar=0",
+    );
+
+    // console.log(facturar)
+    setOpen(false);
+  };
+
+  // const FacturarSave = async () => {
+  //   const objeto = {
+  //     guardado: true,
+  //     valor: parseInt(precioFactu),
+  //     personas: 1,
+  //     pedidos: seleccionFactu,
+  //   };
+
+  //   seleccionFactu.map((dt) => {
+  //     UpdatePedido(dt);
+  //   });
+  //   const facturar = await axios.post(
+  //     `${api}facturas/add/`,
+  //     objeto,
+  //   );
+
+  //   setOpen(false);
+  // };
 
   const handleClose = () => {
     setOpen(false);
@@ -404,12 +421,18 @@ const All = () => {
           <Button onClick={FacturarAlone} color="primary">
             Sólo Facturar
           </Button>
-          <Button onClick={FacturarSave} color="primary">
+          {/* <Button onClick={FacturarSave} color="primary">
             Sólo Guardar
-          </Button>
-          <Button onClick={handleClose} color="primary">
+          </Button> */}
+
+          {/* <ReactToPrint
+            trigger={() => <button>Print this out!</button>}
+            content={() => componentRef.current}
+          />
+          <ComponentToPrint ref={componentRef} />
+          <Button onClick={FacturarAndPrint} color="primary">
             Facturar e Imprimir
-          </Button>
+          </Button> */}
         </DialogActions>
       </Dialog>
     </>
