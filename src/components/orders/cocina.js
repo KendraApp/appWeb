@@ -8,21 +8,22 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { Button } from "@material-ui/core/";
 import Checkbox from "@material-ui/core/Checkbox";
 import axios from "axios";
+import { api } from "../../functions/db";
 
 const Cocina = () => {
   const [pedidos, setPedidos] = useState([]);
-  const [isProd, setIsProd] = useState(false);
+  // const [isProd, setIsProd] = useState(false);
   const [open, setOpen] = useState(false);
   const [cliente, setCliente] = useState();
 
   const obtenerPedidos = async () => {
     const new_pedidos = await axios.get(
-      `http://localhost:8000/api/pedido?ordering=-id&entrega_cocina=false`,
+      `${api}pedido?ordering=-id&entrega_cocina=false`,
     );
 
     if (new_pedidos.data.length > 0) {
       setPedidos(new_pedidos.data);
-      setIsProd(true);
+      //setIsProd(true);
     } else setPedidos([]);
   };
 
@@ -44,7 +45,7 @@ const Cocina = () => {
       hora_final: hora_final,
     };
 
-    await axios.put(`http://localhost:8000/api/pedido/update/${id}/`, objeto);
+    await axios.put(`${api}pedido/update/${id}/`, objeto);
   };
   useEffect(() => {
     setInterval(() => {

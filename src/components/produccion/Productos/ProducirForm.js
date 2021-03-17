@@ -10,18 +10,8 @@ import {
   StepContent,
   Paper,
   Typography,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  ListItemSecondaryAction,
-  IconButton,
-  Avatar,
-  List,
   TextField,
 } from "@material-ui/core/";
-import shortid from "shortid";
-import FolderIcon from "@material-ui/icons/Folder";
-import DeleteIcon from "@material-ui/icons/Delete";
 import { makeStyles } from "@material-ui/core/styles";
 import { api } from "../../../functions/db";
 import Notification from "../../notifications";
@@ -135,6 +125,7 @@ const ProducirForm = () => {
         if (gramos_ins > dt.insumo.gramos) {
           productos += dt.insumo.nombre + ",";
         }
+        return 0;
       });
     }
     if (adiciones.length > 0) {
@@ -146,6 +137,7 @@ const ProducirForm = () => {
           productos +=
             dt.producto.nombre + " de " + dt.producto.sabor.nombre + ",";
         }
+        return 0;
       });
     }
     // Actualizamos el valor si tiene o no productos sin existencia
@@ -274,6 +266,8 @@ const ProducirForm = () => {
           UpGramosInsumos_2(data.producto.id, data.producto.gramos, gramos_ins);
           ConsumoProduccion(data.producto.id, gramos_ins);
           // Agregamos el producto consumido
+
+          return 0;
         });
       }
 

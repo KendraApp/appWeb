@@ -9,6 +9,7 @@ import ArrowDownward from "@material-ui/icons/ArrowDownward";
 import { Button } from "@material-ui/core/";
 import Checkbox from "@material-ui/core/Checkbox";
 import axios from "axios";
+import { api } from "../../functions/db";
 
 const Listar = () => {
   const [pedidos, setPedidos] = useState([]);
@@ -26,13 +27,13 @@ const Listar = () => {
       hora_entrega: hora_entrega,
     };
 
-    await axios.put(`http://localhost:8000/api/pedido/update/${id}/`, objeto);
+    await axios.put(`${api}pedido/update/${id}/`, objeto);
     //console.log("info de actualizar" , updatepedido)
   };
   useEffect(() => {
     const obtenerPedidos = async () => {
       const new_pedidos = await axios.get(
-        `http://localhost:8000/api/pedido?ordering=hora_final&entrega_cocina=true&entrega_cliente=false`,
+        `${api}pedido?ordering=hora_final&entrega_cocina=true&entrega_cliente=false`,
       );
 
       if (new_pedidos.data.length > 0) {

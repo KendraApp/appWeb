@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import React from "react";
+// import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { api } from "../../functions/db";
@@ -7,7 +7,7 @@ import { VaciarOrdenesAccion } from "../../reducers/orderDucks";
 import { Button } from "@material-ui/core/";
 
 const ShoppingCartForm = ({ handleInsu }) => {
-  let history = useHistory();
+  // let history = useHistory();
 
   const dispatch = useDispatch();
   const ordenes = useSelector((store) => store.orderDucks);
@@ -22,6 +22,7 @@ const ShoppingCartForm = ({ handleInsu }) => {
           data.adicion,
           data.orden.gramaje,
         );
+        return 0;
       });
 
       // Vaciamos el carrito de compra
@@ -70,6 +71,7 @@ const ShoppingCartForm = ({ handleInsu }) => {
 
       // Agregamos consumo
       ConsumoInsumo(data.insumo.id, data.gramos);
+      return 0;
     });
   };
   // Añadiendo sabor

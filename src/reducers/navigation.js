@@ -88,6 +88,11 @@ const initialState = [
             title: "Realizadas",
             items: [],
           },
+          {
+            url: "/ShopingCart",
+            title: "Carrito",
+            items: [],
+          },
         ],
       },
     ],

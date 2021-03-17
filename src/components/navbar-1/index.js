@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import { FiMenu } from "react-icons/fi";
-import Dropdown4 from "./dropdown-4";
+// import Dropdown4 from "./dropdown-4_shop";
 import Dropdown5 from "./dropdown-5";
 import Search from "./search";
 import "../../css/components/navbar.css";
@@ -13,7 +13,7 @@ const Navbar = () => {
     }),
     shallowEqual,
   );
-  let { rightSidebar, collapsed } = { ...config };
+  let { collapsed } = { ...config };
   const dispatch = useDispatch();
   return (
     <div className="navbar navbar-1 border-b">
@@ -33,7 +33,7 @@ const Navbar = () => {
         <Search />
 
         <span className="ml-auto"></span>
-        <Dropdown4 />
+        <Dropdown5 />
         <Dropdown5 />
         {/* <button
           className="btn-transparent flex items-center justify-center h-16 w-8 mx-4"

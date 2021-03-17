@@ -1,8 +1,8 @@
 {
-  "short_name": "D-board",
-  "name": "D-board",
+  "short_name": "Kendra",
+  "name": "Kendra",
   "start_url": ".",
-  "display": "standalone",
+  "display": "fullscreen",
   "theme_color": "#2196f3",
   "background_color": "#ffffff",
   "icons": [

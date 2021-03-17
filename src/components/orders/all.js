@@ -10,12 +10,12 @@ import Checkbox from "@material-ui/core/Checkbox";
 import axios from "axios";
 import Facturacion from "./facturacion";
 import { api } from "../../functions/db";
-import ReactToPrint from "react-to-print";
+// import ReactToPrint from "react-to-print";
 // import FactuPrint from "./factuprint";
 
 const All = () => {
   const [pedidos, setPedidos] = useState([]);
-  const [isProd, setIsProd] = useState(false);
+  // const [isProd, setIsProd] = useState(false);
   const [open, setOpen] = useState(false);
   const [cliente, setCliente] = useState();
   const [precioFactu, setPrecioFactu] = useState(0);

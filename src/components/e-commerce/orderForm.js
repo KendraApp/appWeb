@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   obtenerOrdenesAccion,
@@ -60,6 +60,7 @@ function getSteps() {
 
 const OrderForm = () => {
   const { id } = useParams();
+  let history = useHistory();
   const [productos, setProductos] = useState([]);
   const [nomProdu, setNomProdu] = useState();
 
@@ -533,7 +534,8 @@ const OrderForm = () => {
   };
 
   const handleReset = () => {
-    setActiveStep(0);
+    // setActiveStep(0);
+    history.push("/e-commerce");
   };
 
   return (
@@ -585,7 +587,7 @@ const OrderForm = () => {
           <Paper square elevation={0} className={classes.resetContainer}>
             <Typography>Orden realizada correctamente</Typography>
             <Button onClick={handleReset} className={classes.button}>
-              Eliminar orden/reiniciar
+              Agregar otro producto
             </Button>
           </Paper>
         )}
