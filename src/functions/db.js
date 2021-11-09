@@ -1,21 +1,12 @@
-//const api = "https://apirest.kendra.com.co/api/";
-
-export const api = "http://192.168.1.36:8000/api/";
+export const api = "https://api-instagrem.herokuapp.com/api/";
 
 // Enpoindd
 
 export const Enpoint = [
   {
-    name: "insumos",
+    name: "account",
   },
   {
-    name: "producto",
-  },
-  {
-    name: "ingredientes",
-  },
-  {
-    name: "producto",
+    name: "follow",
   },
 ];
-// const Method = ["get", "post", "put"];

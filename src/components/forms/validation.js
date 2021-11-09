@@ -2,16 +2,27 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 import Alert from "../alerts";
+import { api } from "../../functions/db";
+import axios from "axios";
 
 const FormValidation = ({ items, onSubmit, alerts }) => {
   const { handleSubmit, errors, register } = useForm();
   let history = useHistory();
+
+  const AddAccount = async (data) => {
+    const orden = await axios.post(`${api}accounts/`, data);
+    return orden;
+  };
   const onSubmitFn = (data) => {
     if (onSubmit) {
       console.log("Aquí están mis datos");
       console.log(data);
-      history.push("/dashboard");
-      onSubmit(data);
+      const orden = AddAccount(data);
+      console.log(orden);
+      // const new_pedidos = await axios.post(`${api}accounts`);
+
+      //history.push("/dashboard");
+      //onSubmit(data);
     }
   };
   items = items.map((item) => {

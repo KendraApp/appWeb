@@ -8,7 +8,7 @@ const Index = () => {
     (state) => ({
       config: state.config,
     }),
-    shallowEqual,
+    shallowEqual
   );
   let { name } = { ...config };
   return (
@@ -27,25 +27,24 @@ const Index = () => {
               Autenticación
             </div>
             <div className="text-sm font-bold">
-              Por favor ingrese su email y contraseña
+              Por favor ingrese su identificación y contraseña
             </div>
           </div>
           <Login />
-          {/* <div className="w-full">
+          <div className="w-full">
             <span>
               <Link className="link" to="/forgot-password">
-                Forgot password?
+                Registrarse
               </Link>
             </span>
-          </div> */}
-          <div className="flex flex-col w-full text-xs mt-4">
+          </div>
+          {/* <div className="flex flex-col w-full text-xs mt-4">
             <div className="flex flex-row space-x-2">
               <Link to="/privacy-policy">Política de privacidad</Link>
               <Link to="/terms-of-service">Términos y condiciones</Link>
-              {/* <Link to="/contact-us">Contact us</Link> */}
             </div>
             <div className="text-grey-500">&copy; {name} 2021</div>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

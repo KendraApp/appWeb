@@ -1,33 +1,33 @@
-import React, {useState} from 'react'
-import Validation from '../forms/validation'
-import Alert from '../alerts'
+import React, { useState } from "react";
+import Validation from "../forms/validation";
+import Alert from "../alerts";
 
-const Login = ({message = null}) => {
-  const [data, onSubmit] = useState(null)
+const Login = ({ message = null }) => {
+  const [data, onSubmit] = useState(null);
 
-  
   let items = [
     {
-      label: 'Email',
-      error: {required: 'Ingrese Email'},
-      name: 'email',
-      type: 'email',
-      placeholder: 'Ingrese teléfono'
+      label: "Identificación",
+      error: { required: "Ingrese Indentificación" },
+      name: "identity",
+      type: "number",
+      placeholder: "Ingrese Identificación",
     },
     {
-      label: 'Contraseña',
+      label: "Contraseña",
       error: {
-        required: 'Contraseña es requerida',
+        required: "Contraseña es requerida",
         minLength: {
           value: 4,
-          message: 'Tu Contraseña no puede menos o igual que cuatro(4) caractéres'
+          message:
+            "Tu Contraseña no puede menos o igual que cuatro(4) caractéres",
         },
       },
-      name: 'password',
-      type: 'password',
-      placeholder: 'Ingrese su contraseña'
+      name: "password",
+      type: "password",
+      placeholder: "Ingrese su contraseña",
     },
-  ]
+  ];
   return (
     <>
       <div className="flex flex-col">
@@ -36,7 +36,8 @@ const Login = ({message = null}) => {
             <Alert
               color="bg-transparent border-green-500 text-green-500"
               borderLeft
-              raised>
+              raised
+            >
               {message}
             </Alert>
           </div>
@@ -44,7 +45,7 @@ const Login = ({message = null}) => {
         <Validation items={items} onSubmit={onSubmit} />
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
